@@ -32,3 +32,4 @@ view-linux: installation_guide.pdf
 # View the PDF (Windows)
 view-windows: installation_guide.pdf
 	start installation_guide.pdf
+
