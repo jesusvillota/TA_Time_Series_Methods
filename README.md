@@ -147,6 +147,18 @@ Each topic follows this structure:
 - Both Jupyter notebooks and `.do` files contain the same analyses
 - Students can work at their own pace and revisit materials as needed
 
+## Contributing
+
+When contributing to this repository, please follow the commit message guidelines specified in `docs/GIT_COMMIT_GUIDE.md`. A helper script is available to guide you through the process:
+
+```bash
+./scripts/git_commit_helper.sh
+```
+
+For detailed information about the commit process and format requirements, see:
+- `docs/GIT_COMMIT_GUIDE.md` - Complete commit guidelines
+- `.agents/TASKS.md` (Task 4) - Original task specification
+
 ## Contact
 
 For questions about the practical sessions, contact the Teaching Assistant.
