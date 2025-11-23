@@ -1,0 +1,501 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{titling}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{float}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\title{Data Download Guide: Time Series for Empirical Applications}
+\author{Jes\'us Villota Miranda}
+\date{Methods for Time Series \\ CEMFI}
+
+\begin{document}
+
+\maketitle
+
+\section*{Introduction}
+
+This guide provides step-by-step instructions for downloading all the time series data needed for the empirical applications in the ``Methods for Time Series'' course at CEMFI.
+
+All data should be saved in the \texttt{data/raw/} folder of your project. Once downloaded, the data will be processed and cleaned by the course scripts before being saved to \texttt{data/processed/}.
+
+\textbf{Important:} Most data is available for automatic download from free online sources (FRED, Yahoo Finance, etc.), but some series require manual downloads. We provide detailed instructions for both.
+
+\section*{Quick Reference: Data Summary}
+
+You will need to download approximately 30 CSV files from three main sources:
+
+\begin{itemize}
+    \item \textbf{FRED (Federal Reserve Economic Data):} 17 files for US economic and financial data
+    \item \textbf{Yahoo Finance:} 4 files for European stock market indices
+    \item \textbf{OECD/FRED:} 7 files for European sovereign bond yields
+\end{itemize}
+
+All files should be CSV format and saved to the \texttt{data/raw/} folder.
+
+\section*{Part 1: US Financial and Economic Data (from FRED)}
+
+FRED is the Federal Reserve Economic Data portal maintained by the Federal Reserve Bank of St. Louis. All data is free to access and download without registration.
+
+\subsection*{Downloading from FRED}
+
+\begin{enumerate}
+    \item Go to \url{https://fred.stlouisfed.org/}
+    \item In the search box, type the Series ID (listed below)
+    \item Click on the series from the search results
+    \item On the series page, click the ``Download'' button (typically at the top right)
+    \item Select ``Download as CSV'' and choose the download option
+    \item The file will be named with the Series ID (e.g., \lstinline{GS10.csv})
+    \item Save it to \texttt{data/raw/}
+\end{enumerate}
+
+\subsection*{US Macroeconomic Data}
+
+Download the following files from FRED:
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{File Name} & \textbf{Series ID} & \textbf{Description} & \textbf{Frequency} \\
+\hline
+\texttt{GDPC1.csv} & GDPC1 & Real Gross Domestic Product & Quarterly \\
+\hline
+\texttt{CPIAUCSL.csv} & CPIAUCSL & Consumer Price Index (All Urban) & Monthly \\
+\hline
+\texttt{FEDFUNDS.csv} & FEDFUNDS & Federal Funds Effective Rate & Monthly \\
+\hline
+\texttt{UNRATE.csv} & UNRATE & Unemployment Rate (National) & Monthly \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection*{US Treasury Yields}
+
+Download the following Treasury yield series from FRED:
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{File Name} & \textbf{Series ID} & \textbf{Description} & \textbf{Frequency} \\
+\hline
+\texttt{GS10.csv} & GS10 & 10-Year Treasury Constant Maturity Rate & Daily \\
+\hline
+\texttt{DGS2.csv} & DGS2 & 2-Year Treasury Constant Maturity Rate & Daily \\
+\hline
+\texttt{DGS5.csv} & DGS5 & 5-Year Treasury Constant Maturity Rate & Daily \\
+\hline
+\texttt{DGS30.csv} & DGS30 & 30-Year Treasury Constant Maturity Rate & Daily \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection*{US Financial Market Data}
+
+Download the following financial market data from FRED:
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{File Name} & \textbf{Series ID} & \textbf{Description} & \textbf{Frequency} \\
+\hline
+\texttt{VIXCLS.csv} & VIXCLS & CBOE Volatility Index (VIX) & Daily \\
+\hline
+\texttt{DEXUSEU.csv} & DEXUSEU & US Dollar to Euro Exchange Rate & Daily \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection*{US State Unemployment Rates}
+
+Download the following state unemployment rates from FRED:
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{File Name} & \textbf{Series ID} & \textbf{Description} & \textbf{Frequency} \\
+\hline
+\texttt{CAUR.csv} & CAUR & California Unemployment Rate & Monthly \\
+\hline
+\texttt{TXUR.csv} & TXUR & Texas Unemployment Rate & Monthly \\
+\hline
+\end{tabular}
+\end{table}
+
+\textbf{Note:} These US state unemployment rates are used as substitutes for Spanish regional data (Madrid and Catalonia) in some empirical applications.
+
+\section*{Part 2: European Stock Market Indices (from Yahoo Finance)}
+
+European stock market data is available from Yahoo Finance without registration. These files have a specific header structure that needs to be preserved.
+
+\subsection*{Downloading from Yahoo Finance}
+
+\begin{enumerate}
+    \item Go to \url{https://finance.yahoo.com/}
+    \item In the search box, type the ticker symbol (listed below)
+    \item Click on the ticker from the search results
+    \item Click on the ``Historical Data'' tab
+    \item Set the date range to your desired period (or use default ``Max'')
+    \item Click ``Download'' at the bottom of the data table
+    \item The file will download with a default name (e.g., \texttt{\^IBEX.csv})
+    \item \textbf{Important:} Rename it according to the table below and save to \texttt{data/raw/}
+\end{enumerate}
+
+\subsection*{European Stock Indices}
+
+Download and rename the following files from Yahoo Finance:
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{File Name} & \textbf{Ticker} & \textbf{Description} & \textbf{Country} \\
+\hline
+\texttt{IBEX35.csv} & \texttt{\^IBEX} & IBEX 35 & Spain \\
+\hline
+\texttt{CAC40.csv} & \texttt{\^FCHI} & CAC 40 & France \\
+\hline
+\texttt{DAX.csv} & \texttt{\^GDAXI} & DAX & Germany \\
+\hline
+\texttt{FTSEMIB.csv} & \texttt{FTSEMIB.MI} & FTSE MIB & Italy \\
+\hline
+\end{tabular}
+\end{table}
+
+\textbf{Important:} Yahoo Finance files have a special header format with multiple rows before the actual data. The processing scripts expect this format with:
+\begin{itemize}
+    \item Row 1: Column names (Date, Open, High, Low, Close, Adj Close, Volume)
+    \item Rows 2-3: Additional header information
+    \item Row 4+: Actual data starting with dates
+\end{itemize}
+
+\textbf{Do NOT modify the file headers} when you download them. The scripts will automatically handle the special format using \lstinline{rowrange(4)} in Stata.
+
+\section*{Part 3: European Sovereign Bond Yields (10-Year)}
+
+European sovereign bond yields are available from FRED/OECD data. These are monthly data on long-term government bond yields (10-year maturity).
+
+\subsection*{Downloading from FRED}
+
+Follow the same procedure as for US data:
+\begin{enumerate}
+    \item Go to \url{https://fred.stlouisfed.org/}
+    \item Search for the Series ID
+    \item Download as CSV and save to \texttt{data/raw/}
+\end{enumerate}
+
+\subsection*{Government Bond Yields}
+
+Download the following 10-year sovereign bond yield files from FRED:
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{File Name} & \textbf{Series ID} & \textbf{Description} & \textbf{Country} \\
+\hline
+\texttt{BOND\_10Y\_DE.csv} & IRLTLT01DEM156N & 10-Year Bond Yield & Germany \\
+\hline
+\texttt{BOND\_10Y\_FR.csv} & IRLTLT01FRM156N & 10-Year Bond Yield & France \\
+\hline
+\texttt{BOND\_10Y\_IT.csv} & IRLTLT01ITM156N & 10-Year Bond Yield & Italy \\
+\hline
+\texttt{BOND\_10Y\_ES.csv} & IRLTLT01ESM156N & 10-Year Bond Yield & Spain \\
+\hline
+\texttt{BOND\_10Y\_PT.csv} & IRLTLT01PTM156N & 10-Year Bond Yield & Portugal \\
+\hline
+\texttt{BOND\_10Y\_GR.csv} & IRLTLT01GRM156N & 10-Year Bond Yield & Greece \\
+\hline
+\texttt{BOND\_10Y\_IE.csv} & IRLTLT01IEM156N & 10-Year Bond Yield & Ireland \\
+\hline
+\end{tabular}
+\end{table}
+
+\section*{Part 4: Spanish Macroeconomic Data}
+
+Spanish macroeconomic data is available from FRED/OECD sources.
+
+\subsection*{Spanish Economic Indicators}
+
+Download the following Spanish data from FRED:
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{File Name} & \textbf{Series ID} & \textbf{Description} & \textbf{Frequency} \\
+\hline
+\texttt{ESP\_GDP.csv} & CPMNACSCAB1GQES & Spain Real GDP & Quarterly \\
+\hline
+\texttt{ESP\_CPI.csv} & ESPCPIALLMINMEI & Spain CPI & Monthly \\
+\hline
+\texttt{ESP\_CREDIT.csv} & QESN628BIS & Spain Credit (BIS) & Quarterly \\
+\hline
+\texttt{ESP\_UNEMP.csv} & LRHUTTTTESQ156S & Spain Unemployment Rate & Quarterly \\
+\hline
+\end{tabular}
+\end{table}
+
+\section*{Part 5: Optional Data (Not Always Required)}
+
+The following data is present in the repository but not used in all exercises:
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{File Name} & \textbf{Series ID} & \textbf{Description} & \textbf{Status} \\
+\hline
+\texttt{SP500.csv} & SP500 & S\&P 500 Index & Optional (not used in exercises) \\
+\hline
+\end{tabular}
+\end{table}
+
+\section*{Recommended Download Workflow}
+
+To efficiently download all required data, follow this step-by-step workflow:
+
+\subsection*{Step 1: Prepare Your Workspace}
+
+\begin{enumerate}
+    \item Navigate to your project folder: \texttt{TA\_Time\_Series\_Methods}
+    \item Verify that the folder \texttt{data/raw/} exists and is empty (or contains only old files)
+    \item Have a text editor open to track which files you've downloaded
+\end{enumerate}
+
+\subsection*{Step 2: Download US Data from FRED (14 files)}
+
+\begin{enumerate}
+    \item Go to \url{https://fred.stlouisfed.org/}
+    \item Download these macroeconomic series first: \texttt{GDPC1.csv}, \texttt{CPIAUCSL.csv}, \texttt{FEDFUNDS.csv}, \texttt{UNRATE.csv}
+    \item Download Treasury yields: \texttt{GS10.csv}, \texttt{DGS2.csv}, \texttt{DGS5.csv}, \texttt{DGS30.csv}
+    \item Download financial data: \texttt{VIXCLS.csv}, \texttt{DEXUSEU.csv}
+    \item Download state unemployment: \texttt{CAUR.csv}, \texttt{TXUR.csv}
+    \item \textbf{Total: 12 FRED files for US data}
+\end{enumerate}
+
+\subsection*{Step 3: Download European Stock Indices from Yahoo Finance (4 files)}
+
+\begin{enumerate}
+    \item Go to \url{https://finance.yahoo.com/}
+    \item Search for and download: \texttt{\^IBEX} $\rightarrow$ rename to \texttt{IBEX35.csv}
+    \item Search for and download: \texttt{\^FCHI} $\rightarrow$ rename to \texttt{CAC40.csv}
+    \item Search for and download: \texttt{\^GDAXI} $\rightarrow$ rename to \texttt{DAX.csv}
+    \item Search for and download: \texttt{FTSEMIB.MI} $\rightarrow$ rename to \texttt{FTSEMIB.csv}
+    \item \textbf{Total: 4 Yahoo Finance files}
+\end{enumerate}
+
+\subsection*{Step 4: Download European Bond Yields from FRED (7 files)}
+
+\begin{enumerate}
+    \item Go back to \url{https://fred.stlouisfed.org/}
+    \item Download the 10-year bond yields for each country: \texttt{BOND\_10Y\_DE.csv}, \texttt{BOND\_10Y\_FR.csv}, \texttt{BOND\_10Y\_IT.csv}, \texttt{BOND\_10Y\_ES.csv}, \texttt{BOND\_10Y\_PT.csv}, \texttt{BOND\_10Y\_GR.csv}, \texttt{BOND\_10Y\_IE.csv}
+    \item \textbf{Total: 7 FRED files for bond yields}
+\end{enumerate}
+
+\subsection*{Step 5: Download Spanish Economic Data from FRED (4 files)}
+
+\begin{enumerate}
+    \item Continue at \url{https://fred.stlouisfed.org/}
+    \item Download Spanish data: \texttt{ESP\_GDP.csv}, \texttt{ESP\_CPI.csv}, \texttt{ESP\_CREDIT.csv}, \texttt{ESP\_UNEMP.csv}
+    \item \textbf{Total: 4 FRED files for Spanish data}
+\end{enumerate}
+
+\subsection*{Step 6: Verify Your Downloads}
+
+\begin{enumerate}
+    \item Check that you have downloaded \textbf{27 files total}
+    \item Verify all files are in CSV format and located in \texttt{data/raw/}
+    \item Make sure file names match exactly the names listed above (case-sensitive on macOS/Linux)
+    \item Check that Yahoo Finance files have not been modified (keep the special header structure)
+\end{enumerate}
+
+\section*{Troubleshooting Common Download Issues}
+
+\subsection*{Issue: FRED website layout has changed}
+
+\textbf{Solution:} Look for a ``Download'' button or link on the series page. Most FRED series have a download option prominently displayed. If you can't find it, try right-clicking on the data table and selecting ``Export''.
+
+\subsection*{Issue: Yahoo Finance ticker not found}
+
+\textbf{Solution:} Make sure you're searching with the exact ticker symbol (including any \verb|^| or . characters):
+\begin{lstlisting}[language={},basicstyle=\ttfamily\footnotesize]
+^IBEX    (IBEX 35, Spain)
+^FCHI    (CAC 40, France)
+^GDAXI   (DAX, Germany)
+FTSEMIB.MI (FTSE MIB, Italy)
+\end{lstlisting}
+
+\subsection*{Issue: Downloaded file is not a CSV}
+
+\textbf{Solution:} Some browsers might download as .xlsx or .txt. You can either:
+\begin{itemize}
+    \item Change the file extension to .csv
+    \item Re-download and ensure you select ``CSV'' format if prompted
+    \item Open the file, copy the data, and paste into a new .csv file
+\end{itemize}
+
+\subsection*{Issue: File shows 0 bytes or is corrupted}
+
+\textbf{Solution:}
+\begin{itemize}
+    \item Delete the corrupted file
+    \item Clear your browser cache (Cmd+Shift+Delete on most browsers)
+    \item Try downloading again from a different browser
+    \item Check your internet connection
+\end{itemize}
+
+\subsection*{Issue: Data is not available for the date range I need}
+
+\textbf{Solution:} 
+\begin{itemize}
+    \item Some series have limited historical data (e.g., BOND\_10Y\_IT starts in 1991)
+    \item Download all available data; the processing scripts will handle different date ranges
+    \item If a series is completely missing, check the Metadata document in \texttt{materials/instructions/metadata.md}
+\end{itemize}
+
+\section*{Data Organization After Download}
+
+Once all files are downloaded to \texttt{data/raw/}, the file structure should look like:
+
+\begin{lstlisting}[language={},basicstyle=\ttfamily\footnotesize]
+data/
+  raw/
+    GDPC1.csv
+    CPIAUCSL.csv
+    FEDFUNDS.csv
+    UNRATE.csv
+    GS10.csv
+    DGS2.csv
+    DGS5.csv
+    DGS30.csv
+    VIXCLS.csv
+    DEXUSEU.csv
+    CAUR.csv
+    TXUR.csv
+    IBEX35.csv
+    CAC40.csv
+    DAX.csv
+    FTSEMIB.csv
+    BOND_10Y_DE.csv
+    BOND_10Y_FR.csv
+    BOND_10Y_IT.csv
+    BOND_10Y_ES.csv
+    BOND_10Y_PT.csv
+    BOND_10Y_GR.csv
+    BOND_10Y_IE.csv
+    ESP_GDP.csv
+    ESP_CPI.csv
+    ESP_CREDIT.csv
+    ESP_UNEMP.csv
+\end{lstlisting}
+
+The data processing scripts will:
+\begin{enumerate}
+    \item Read these CSV files from \texttt{data/raw/}
+    \item Clean and process them (handling different frequencies, missing values, etc.)
+    \item Save processed versions to \texttt{data/processed/} in Stata (.dta) format
+    \item These processed files are then used in the empirical applications
+\end{enumerate}
+
+\section*{Next Steps}
+
+Once you've downloaded all the data:
+
+\begin{enumerate}
+    \item Review the metadata document: \texttt{materials/instructions/metadata.md}
+    \item Check the empirical applications guide: \texttt{materials/instructions/empirical\_applications.md}
+    \item Run the data processing scripts to create processed datasets
+    \item Open the course notebooks in \texttt{sessions/} to begin the empirical exercises
+\end{enumerate}
+
+\section*{References and Data Sources}
+
+\begin{itemize}
+    \item \textbf{FRED:} Federal Reserve Economic Data \\
+    \url{https://fred.stlouisfed.org/}
+    
+    \item \textbf{Yahoo Finance:} Historical stock prices and indices \\
+    \url{https://finance.yahoo.com/}
+    
+    \item \textbf{CBOE:} Chicago Board Options Exchange (VIX) \\
+    \url{https://www.cboe.com/}
+    
+    \item \textbf{OECD:} International economic statistics \\
+    \url{https://stats.oecd.org/}
+    
+    \item \textbf{BIS:} Bank for International Settlements (credit data) \\
+    \url{https://www.bis.org/statistics/}
+\end{itemize}
+
+\section*{FAQ}
+
+\textbf{Q: Do I need to register to download data?}
+
+A: No. All the data sources used in this guide (FRED, Yahoo Finance) are free and don't require registration.
+
+\textbf{Q: Can I download all files at once?}
+
+A: Unfortunately, FRED and Yahoo Finance don't offer bulk download options. However, the process for each file is quick (2-3 minutes total if you're efficient). Estimated total time: 30-45 minutes for all 27 files.
+
+\textbf{Q: What if I already have some of these files?}
+
+A: You can skip downloading them and proceed to verify them. Just make sure the file names match exactly.
+
+\textbf{Q: Can I use my own data instead?}
+
+A: For learning purposes, it's recommended to use the standard data provided in this guide. However, you can substitute other time series if they cover similar concepts (stock returns, interest rates, etc.).
+
+\textbf{Q: Where can I find updates to this data?}
+
+A: All these data sources are continuously updated. You can download fresh data anytime by following the same steps. The course scripts are designed to work with any date range.
+
+\textbf{Q: What if the website layouts have changed?}
+
+A: The process may be slightly different, but both FRED and Yahoo Finance have prominent download options. Look for buttons labeled ``Download'', ``Export'', or similar. Most data portals follow a similar workflow.
+
+\end{document}
