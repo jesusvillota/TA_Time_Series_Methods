@@ -1,0 +1,430 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{titling}
+\usepackage{enumitem}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\title{Setup Guide: VS Code + Stata Kernel for Time Series Analysis}
+\author{Jes\'us Villota Miranda}
+\date{Advanced Training School:Methods for Time Series \\ CEMFI}
+
+\begin{document}
+
+\maketitle
+
+\section*{Introduction}
+
+Welcome to the setup guide for the ``Methods for Time Series'' course at CEMFI! This guide will help you set up everything you need to run Stata code in Jupyter notebooks using Visual Studio Code (VS Code) as your code editor. 
+
+This setup allows you to combine the powerful statistical capabilities of Stata with the interactive notebook environment of Jupyter, making it easier to learn and practice time series analysis techniques.
+
+\textbf{What you'll get:}
+\begin{itemize}
+    \item VS Code installed and configured for data science
+    \item Python environment with Jupyter and required packages
+    \item Stata kernel for Jupyter notebooks
+    \item Ability to run Stata code in interactive notebooks
+\end{itemize}
+
+We'll cover the steps for Windows, macOS, and Linux. Follow the sections for your operating system (OS). If you're unsure what OS you have, check your computer's settings.
+
+\section*{Step 1: Install Stata}
+
+Stata is the statistical software that will perform the actual time series analysis. You need to have Stata installed before setting up the Jupyter kernel.
+
+\subsection*{For Windows:}
+
+\begin{enumerate}
+    \item Go to \url{https://www.stata.com} and click on "Buy" or "Contact Sales" to purchase or get access to Stata.
+    \item Download the Windows installer for your version (StataMP, StataSE, or StataIC).
+    \item Run the downloaded installer and follow the on-screen instructions.
+    \item Note the installation directory (typically \texttt{C:\textbackslash Program Files\textbackslash Stata17\textbackslash} or similar).
+    \item Launch Stata once to complete the license activation process.
+\end{enumerate}
+
+\subsection*{For macOS:}
+
+\begin{enumerate}
+    \item Go to \url{https://www.stata.com} and click on "Buy" or "Contact Sales" to purchase or get access to Stata.
+    \item Download the macOS installer for your version (StataMP, StataSE, or StataIC).
+    \item Open the downloaded \texttt{.dmg} file and drag Stata to your Applications folder.
+    \item Launch Stata from Applications to complete the license activation.
+    \item Note the installation path: \texttt{/Applications/Stata/StataMP.app} (or StataSE.app/StataIC.app).
+\end{enumerate}
+
+\subsection*{For Linux:}
+
+\begin{enumerate}
+    \item Go to \url{https://www.stata.com} and click on "Buy" or "Contact Sales" to purchase or get access to Stata.
+    \item Download the Linux installer for your architecture (32-bit or 64-bit).
+    \item Extract the downloaded file: \lstinline{tar -xzf stata17-linux64.tar.gz}
+    \item Move to desired location: \lstinline{sudo mv stata17 /usr/local/}
+    \item Set permissions: \lstinline{sudo chown -R $(whoami) /usr/local/stata17}
+    \item Launch Stata to complete license activation: \lstinline{/usr/local/stata17/xstata}
+\end{enumerate}
+
+\subsection*{Verify Stata Installation}
+
+To verify your Stata installation, try running a simple command:
+
+\begin{verbatim}
+# On Windows (in Command Prompt):
+"C:\Program Files\Stata17\StataMP.exe" -e "display \"Hello from Stata\""
+
+# On macOS (in Terminal):
+/Applications/Stata/StataMP.app/Contents/MacOS/stata-mp -e "display \"Hello from Stata\""
+
+# On Linux (in Terminal):
+/usr/local/stata17/stata-mp -e "display \"Hello from Stata\""
+\end{verbatim}
+
+You should see Stata start and display the message.
+
+\section*{Step 2: Install VS Code}
+
+VS Code is a free code editor where you'll write and run your Jupyter notebooks.
+
+\begin{enumerate}
+    \item Go to the official website: \url{https://code.visualstudio.com/download}.
+    \item Download the installer for your OS (it will auto-detect, but select Windows, Mac, or Linux if needed).
+    \item Run the downloaded file and follow the on-screen instructions to install. Accept the defaults if you're unsure.
+    \item Once installed, open VS Code to make sure it launches. It should look like a blank window with a menu bar at the top.
+\end{enumerate}
+
+\section*{Step 3: Install Python and UV}
+
+We'll use UV to manage Python packages and create an isolated environment for our project.
+
+\subsection*{For Windows:}
+
+\begin{enumerate}
+    \item Open PowerShell (search for "PowerShell" in your start menu and run it as administrator by right-clicking $>$ Run as administrator).
+    \item Copy and paste this command, then press Enter:
+    \begin{verbatim}
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+    \end{verbatim}
+    \item Follow any prompts. It may ask you to restart PowerShell or your computer.
+    \item To verify: Reopen PowerShell and run \lstinline{uv --version}. You should see a version number.
+\end{enumerate}
+
+\subsection*{For macOS:}
+
+\begin{enumerate}
+    \item Open Terminal (press Command + Space, type "Terminal", and open it).
+    \item Copy and paste this command, then press Enter:
+    \begin{verbatim}
+curl -LsSf https://astral.sh/uv/install.sh | sh
+    \end{verbatim}
+    \item If you don't have curl, use: \lstinline{wget -qO- https://astral.sh/uv/install.sh | sh} (but curl is usually pre-installed).
+    \item Follow any prompts. It may add UV to your PATH.
+    \item To verify: In Terminal, run \lstinline{uv --version}. You should see a version number.
+\end{enumerate}
+
+\subsection*{For Linux:}
+
+\begin{enumerate}
+    \item Open your Terminal (search for "Terminal" in your applications menu).
+    \item Copy and paste this command, then press Enter:
+    \begin{verbatim}
+curl -LsSf https://astral.sh/uv/install.sh | sh
+    \end{verbatim}
+    \item If you don't have curl, install it first (e.g., on Ubuntu: \lstinline{sudo apt update && sudo apt install curl}).
+    \item Follow any prompts.
+    \item To verify: In Terminal, run \lstinline{uv --version}. You should see a version number.
+\end{enumerate}
+
+\subsection*{Install Python}
+
+Now that UV is installed, use it to download and install Python:
+
+\begin{enumerate}
+    \item Run this command:
+    \begin{verbatim}
+uv python install 3.11
+    \end{verbatim}
+    \item UV will download and install Python automatically (it may take a few minutes depending on your internet).
+    \item To verify: Run \lstinline{uv python list}. You should see Python 3.11 listed as installed.
+\end{enumerate}
+
+\section*{Step 4: Set Up the Project Environment}
+
+\subsection*{Download Course Materials}
+
+First, you need to download the course materials:
+
+\begin{enumerate}
+    \item Go to \url{https://github.com/jesusvillotamiranda/TA_Time_Series_Methods}
+    \item Click the green "Code" button and select "Download ZIP"
+    \item Extract the ZIP file to a folder on your computer (e.g., \texttt{TA\_Time\_Series\_Methods})
+\end{enumerate}
+
+\subsection*{Initialize Python Environment}
+
+\begin{enumerate}
+    \item Open VS Code
+    \item Go to File $>$ Open Folder... and select the extracted \texttt{TA\_Time\_Series\_Methods} folder
+    \item Open a terminal in VS Code: Terminal $>$ New Terminal
+    \item In the terminal, navigate to the project folder (it should already be there)
+    \item Run this command to install all required packages:
+    \begin{verbatim}
+uv sync
+    \end{verbatim}
+    This will create a virtual environment and install all dependencies listed in \texttt{pyproject.toml}.
+    \item Activate the virtual environment:
+    \begin{verbatim}
+# On Windows:
+.venv\Scripts\activate
+
+# On macOS/Linux:
+source .venv/bin/activate
+    \end{verbatim}
+\end{enumerate}
+
+\section*{Step 5: Install and Configure Stata Kernel}
+
+Now we'll install the Stata kernel that allows Jupyter to communicate with Stata.
+
+\begin{enumerate}
+    \item Make sure you're in the project directory and the virtual environment is activated
+    \item Run this command to install the Stata kernel:
+    \begin{verbatim}
+uv run python -m stata_kernel.install
+    \end{verbatim}
+    \item The installer will prompt you for the Stata executable path. Enter the path based on your OS and Stata version:
+    
+    \textbf{Windows examples:}
+    \begin{itemize}
+        \item StataMP: \texttt{C:\textbackslash Program Files\textbackslash Stata17\textbackslash StataMP.exe}
+        \item StataSE: \texttt{C:\textbackslash Program Files\textbackslash Stata17\textbackslash StataSE.exe}
+        \item StataIC: \texttt{C:\textbackslash Program Files\textbackslash Stata17\textbackslash StataIC.exe}
+    \end{itemize}
+    
+    \textbf{macOS examples:}
+    \begin{itemize}
+        \item StataMP: \texttt{/Applications/Stata/StataMP.app/Contents/MacOS/stata-mp}
+        \item StataSE: \texttt{/Applications/Stata/StataSE.app/Contents/MacOS/stata-se}
+        \item StataIC: \texttt{/Applications/Stata/StataIC.app/Contents/MacOS/stata-ic}
+    \end{itemize}
+    
+    \textbf{Linux examples:}
+    \begin{itemize}
+        \item StataMP: \texttt{/usr/local/stata17/stata-mp}
+        \item StataSE: \texttt{/usr/local/stata17/stata-se}
+        \item StataIC: \texttt{/usr/local/stata17/stata}
+    \end{itemize}
+    
+    \item The installer will test the connection and confirm successful setup.
+\end{enumerate}
+
+\subsection*{Verify Kernel Installation}
+
+To verify the Stata kernel is properly installed:
+
+\begin{verbatim}
+jupyter kernelspec list
+\end{verbatim}
+
+You should see \texttt{stata} in the list of available kernels.
+
+\section*{Step 6: Set Up VS Code for Jupyter}
+
+\begin{enumerate}
+    \item Install the Python extension for VS Code:
+    \begin{itemize}
+        \item Click the Extensions icon on the left sidebar (it looks like four squares)
+        \item Search for "Python" (by Microsoft)
+        \item Click Install on the top result
+    \end{itemize}
+    
+    \item Install the Jupyter extension:
+    \begin{itemize}
+        \item In the Extensions sidebar, search for "Jupyter"
+        \item Install the "Jupyter" extension by Microsoft
+    \end{itemize}
+    
+    \item Configure Python interpreter:
+    \begin{itemize}
+        \item At the bottom left of VS Code, click on the Python version (it might say "Select Interpreter" if none is chosen)
+        \item Search for the one in your project's \texttt{.venv} folder
+        \item Select the interpreter that shows your project path
+    \end{itemize}
+\end{enumerate}
+
+\section*{Step 7: Test the Setup}
+
+Let's create a test notebook to verify everything works:
+
+\begin{enumerate}
+    \item In VS Code, create a new file: File $>$ New File
+    \item Save it as \texttt{test\_stata.ipynb}
+    \item VS Code should automatically open it in Jupyter notebook format
+    \item Click on "Select Kernel" in the top right of the notebook
+    \item Choose "Stata" from the list of available kernels
+    \item Create a new cell and enter this Stata code:
+    \begin{lstlisting}
+clear
+set obs 100
+gen x = rnormal()
+gen y = 2 + 0.5*x + rnormal()
+reg y x
+    \end{lstlisting}
+    \item Run the cell (Shift + Enter or the run button)
+    \item You should see Stata output with the regression results
+\end{enumerate}
+
+\section*{Step 8: Open Course Notebooks}
+
+Now you can open the actual course notebooks:
+
+\begin{enumerate}
+    \item Navigate to \texttt{sessions/session\_1/} in the file explorer
+    \item Open any \texttt{.ipynb} file (e.g., \texttt{01\_autocorrelation\_correlation.ipynb})
+    \item Make sure the kernel is set to "Stata" (top right corner)
+    \item You can now run the cells and follow along with the course material
+\end{enumerate}
+
+\section*{Troubleshooting}
+
+\subsection*{Common Issues and Solutions}
+
+\textbf{Problem: "stata\_kernel not found" or import errors}
+
+\textbf{Solution:}
+\begin{verbatim}
+# Make sure you're in the project directory
+cd TA_Time_Series_Methods
+
+# Reinstall dependencies
+uv sync
+
+# Reinstall the kernel
+uv run python -m stata_kernel.install
+\end{verbatim}
+
+\textbf{Problem: Stata kernel doesn't appear in VS Code}
+
+\textbf{Solution:}
+\begin{verbatim}
+# Check if kernel is installed
+jupyter kernelspec list
+
+# If not listed, reinstall
+uv run python -m stata_kernel.install
+
+# Restart VS Code
+\end{verbatim}
+
+\textbf{Problem: "Stata executable not found" errors}
+
+\textbf{Solution:} Verify the Stata executable path you provided during installation:
+\begin{itemize}
+    \item Test the path manually in terminal/command prompt
+    \item Make sure Stata launches with the exact path you provided
+    \item Reinstall the kernel with the correct path
+\end{itemize}
+
+\textbf{Problem: Kernel dies or notebook crashes}
+
+\textbf{Solution:}
+\begin{itemize}
+    \item Check that your Stata license is valid and activated
+    \item Verify Stata can run independently (not through Jupyter)
+    \item Try restarting VS Code and the notebook
+    \item Check that you have enough system memory
+\end{itemize}
+
+\textbf{Problem: Can't find Stata executable}
+
+\textbf{Solution:} Find your Stata installation:
+
+\begin{verbatim}
+# On Windows (in PowerShell):
+Get-ChildItem -Recurse -Path "C:\Program Files\Stata*" -Include "Stata*.exe"
+
+# On macOS (in Terminal):
+find /Applications -name "stata*" -type f 2>/dev/null
+
+# On Linux (in Terminal):
+find /usr/local -name "stata*" -type f 2>/dev/null
+\end{verbatim}
+
+\subsection*{Operating System Specific Issues}
+
+\textbf{Windows:}
+\begin{itemize}
+    \item Make sure you run PowerShell as administrator for UV installation
+    \item If you get permission errors, try running VS Code as administrator
+    \item Check that your antivirus isn't blocking the Stata executable
+\end{itemize}
+
+\textbf{macOS:}
+\begin{itemize}
+    \item If you get "command not found" for stata-mp, make sure Stata is in /Applications/Stata/
+    \item You might need to allow the Stata app in Security \& Privacy settings
+    \item Try launching Stata from Applications first to complete any setup
+\end{itemize}
+
+\textbf{Linux:}
+\begin{itemize}
+    \item Make sure the Stata executable has proper permissions: \lstinline{chmod +x /path/to/stata}
+    \item You might need to install additional libraries: \lstinline{sudo apt install libxt6 libxmu6}
+    \item Check that your display manager supports X11 if using GUI Stata
+\end{itemize}
+
+\section*{Quick Reference Commands}
+
+Here's a summary of the key commands you'll need:
+
+\begin{verbatim}
+# Navigate to project
+cd /path/to/TA_Time_Series_Methods
+
+# Install/update packages
+uv sync
+
+# Activate virtual environment
+# Windows: .venv\Scripts\activate
+# macOS/Linux: source .venv/bin/activate
+
+# Install Stata kernel
+uv run python -m stata_kernel.install
+
+# List available kernels
+jupyter kernelspec list
+
+# Launch Jupyter Lab (alternative to VS Code)
+uv run jupyter lab
+\end{verbatim}
+
+\end{document}

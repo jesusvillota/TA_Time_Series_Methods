@@ -1,0 +1,197 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{titling}
+\usepackage{enumitem}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\title{Setup Guide: VS Code + UV for Python}
+\author{Jes\'us Villota Miranda}
+\date{Data Science for Economics \\ CEMFI}
+
+\begin{document}
+
+\maketitle
+
+% \section*{Introduction}
+
+Welcome to the setup guide for the course ``Data Science for Economics'' at CEMFI! This guide will help you set up everything you need to run Python code on your computer using Visual Studio Code (VS Code) as your code editor and UV as your tool for managing dependencies (like libraries).
+\textbf{Important note}: You won't need to install Python separately because UV can handle that for you.
+
+We'll cover the steps for Windows, macOS, and Linux where they differ. Follow the sections for your operating system (OS). If you're unsure what OS you have, check your computer's settings (e.g., on Windows, search for ``About your PC''; on macOS, click the Apple menu $>$ About This Mac).
+
+\section*{Step 1: Install VS Code}
+
+VS Code is a free code editor where you'll write and run your Python code.
+
+\begin{enumerate}
+    \item Go to the official website: \url{https://code.visualstudio.com/download}.
+    \item Download the installer for your OS (it will auto-detect, but select Windows, Mac, or Linux if needed).
+    \item Run the downloaded file and follow the on-screen instructions to install. Accept the defaults if you're unsure.
+    \item Once installed, open VS Code to make sure it launches. It should look like a blank window with a menu bar at the top.
+\end{enumerate}
+
+\section*{Step 2: Install UV}
+
+UV is a fast tool for managing Python environments and dependencies. It doesn't require Python to be installed beforehand---it's a standalone program. 
+% We'll use the simplest installation method (standalone installer) since you have no prior tools set up.
+
+% \textbf{Important Note for Beginners:} These commands involve running a script from the internet. For safety, you can inspect the script first (optional but recommended):
+% \begin{itemize}
+%     \item On Windows: Open PowerShell (search for ``PowerShell'' in your start menu), then run: \lstinline{irm https://astral.sh/uv/install.ps1 | more}
+%     \item On macOS/Linux: Open Terminal (on macOS, search for ``Terminal'' in Spotlight; on Linux, it's usually in your applications), then run: \lstinline{curl -LsSf https://astral.sh/uv/install.sh | less}
+% \end{itemize}
+
+% If it looks okay (it's just installation code from the official site), proceed.
+
+\subsection*{For Windows:}
+\begin{enumerate}
+    \item Open PowerShell (search for ``PowerShell'' in your start menu and run it as administrator by right-clicking $>$ Run as administrator).
+    \item Copy and paste this command, then press Enter:
+    \begin{verbatim}
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+    \end{verbatim}
+    \item Follow any prompts. It may ask you to restart PowerShell or your computer.
+    \item To verify: Reopen PowerShell and run \lstinline{uv --version}. You should see a version number (e.g., uv 0.x.x).
+\end{enumerate}
+
+\subsection*{For macOS:}
+\begin{enumerate}
+    \item Open Terminal (press Command + Space, type ``Terminal'', and open it).
+    \item Copy and paste this command, then press Enter:
+    \begin{verbatim}
+curl -LsSf https://astral.sh/uv/install.sh | sh
+    \end{verbatim}
+    \item If you don't have curl, use: \lstinline{wget -qO- https://astral.sh/uv/install.sh | sh} (but curl is usually pre-installed).
+    \item Follow any prompts. It may add UV to your PATH (where commands are found).
+    \item To verify: In Terminal, run \lstinline{uv --version}. You should see a version number.
+\end{enumerate}
+
+\subsection*{For Linux:}
+\begin{enumerate}
+    \item Open your Terminal (search for ``Terminal'' in your applications menu).
+    \item Copy and paste this command, then press Enter:
+    \begin{verbatim}
+curl -LsSf https://astral.sh/uv/install.sh | sh
+    \end{verbatim}
+    \item If you don't have curl, install it first (e.g., on Ubuntu: \lstinline{sudo apt update && sudo apt install curl}).
+    \item Follow any prompts.
+    \item To verify: In Terminal, run \lstinline{uv --version}. You should see a version number.
+\end{enumerate}
+
+If you run into issues (e.g., permission errors), search online for ``install UV on [your OS]'' or ask for help.
+
+\section*{Step 3: Install Python Using UV}
+
+Now that UV is installed, use it to download and install Python. We'll install Python 3.11 (a stable, recent version).
+
+\begin{enumerate}
+    \item Open your command line tool:
+    \begin{itemize}
+        \item Windows: PowerShell.
+        \item macOS/Linux: Terminal.
+    \end{itemize}
+    \item Run this command:
+    \begin{verbatim}
+uv python install 3.11
+    \end{verbatim}
+    \item UV will download and install Python automatically (it may take a few minutes depending on your internet).
+    \item To verify: Run \lstinline{uv python list}. You should see Python 3.11 listed as installed.
+    \item Optionally, to make ``python'' command work globally, run:
+    \lstinline{uv python install --default}. But for now, we'll use it through VS Code.
+\end{enumerate}
+
+\section*{Step 4: Set Up VS Code for Python}
+
+\begin{enumerate}
+    \item Open VS Code.
+    \item Install the Python extension (this adds Python support):
+    \begin{itemize}
+        \item Click the Extensions icon on the left sidebar (it looks like four squares).
+        \item Search for ``Python'' (by Microsoft).
+        \item Click Install on the top result.
+    \end{itemize}
+    \item Create a new folder for your code:
+    \begin{itemize}
+        \item In VS Code, go to File $>$ Open Folder... and create/select an empty folder on your computer (e.g., name it ``PythonProjects'').
+    \end{itemize}
+    \item Create a test Python file:
+    \begin{itemize}
+        \item In the Explorer sidebar (left side), right-click inside the folder $>$ New File.
+        \item Name it \lstinline{hello.py}.
+        \item Open the file and type:
+        \begin{verbatim}
+print("Hello, World!")
+        \end{verbatim}
+        \item Save it (Ctrl+S or Command+S).
+    \end{itemize}
+    \item Select the Python interpreter:
+    \begin{itemize}
+        \item At the bottom right of VS Code, click on the Python version (it might say ``Select Interpreter'' if none is chosen).
+        \item Search for the one installed by UV (it should show something like ``Python 3.11 (uv)'').
+        \item If it doesn't appear, click ``Enter interpreter path...'' and browse to where UV installed it (usually in your home directory under \lstinline{.local/uv/python/} or similar---UV will tell you the path after installation).
+    \end{itemize}
+    \item Run the code:
+    \begin{itemize}
+        \item Right-click in the \lstinline{hello.py} file $>$ Run Python File in Terminal.
+        \item Or press Ctrl+Shift+P (Command+Shift+P on Mac), type ``Python: Run Python File'', and select it.
+        \item You should see ``Hello, World!'' printed in the terminal at the bottom.
+    \end{itemize}
+\end{enumerate}
+
+\section*{Step 5: Using UV for Dependencies (Basics)}
+
+For now, this setup lets you run plain Python. In the course, we will need libraries (dependencies) like pandas for data manipulation or numpy for numerical computations. UV makes managing these easy by creating isolated environments for your projects, preventing conflicts between different projects.
+
+Here are the key UV commands for dependency management. Run these in the terminal inside VS Code (go to Terminal $>$ New Terminal) while in your project folder.
+
+\begin{itemize}
+    \item \lstinline{uv init}: Initializes a new UV-managed project in the current directory. This creates a \lstinline{pyproject.toml} file (which stores project metadata and dependencies) and sets up a virtual environment automatically if needed. Use this to start a new project.
+    
+    \item \lstinline{uv add <package>}: Adds a dependency (library) to your project. For example, \lstinline{uv add pandas} installs the pandas library and adds it to your \lstinline{pyproject.toml}. UV will download and install the package into your project's virtual environment. You can specify versions, e.g., \lstinline{uv add pandas==2.0.0}.
+    
+    \item \lstinline{uv remove <package>}: Removes a dependency from your project. For example, \lstinline{uv remove pandas} uninstalls the package and updates \lstinline{pyproject.toml}.
+    
+    \item \lstinline{uv sync}: Synchronizes your environment with the dependencies listed in \lstinline{pyproject.toml}. This installs any missing packages or updates them to match the specified versions. Run this after adding/removing dependencies or when pulling changes from a shared project.
+    
+    \item \lstinline{uv lock}: Generates or updates a \lstinline{uv.lock} file, which pins exact versions of dependencies for reproducibility. This ensures everyone on the team uses the same package versions.
+    
+    \item \lstinline{uv run <command>}: Runs a command or script in the project's virtual environment. For example, \lstinline{uv run python hello.py} executes your script with the project's Python and dependencies. This is useful for ensuring isolation.
+    
+    \item \lstinline{uv venv}: Creates a new virtual environment manually (e.g., \lstinline{uv venv .venv}). UV often handles this automatically with \lstinline{uv init}, but you can use this for custom setups.
+    
+    \item \lstinline{uv list}: Lists all installed packages in the current environment, showing versions and details.
+\end{itemize}
+
+These commands create and manage virtual environments automatically, so you don't need to activate/deactivate them manually like with older tools.
+
+If you get stuck, search for error messages online or ask in the session. This minimal setup should take 10-20 minutes. See you in class!
+
+\end{document}
