@@ -1,16 +1,4 @@
 <todo1>
-In the folder TeX/data_instalation_guide, create a tex document to guide students on how to download the data series. 
-For reference, look at:
-    - TeX/installation_guide/main.tex
-    - TeX/example/main.tex
-
-For details about the data look at
-    - materials/instructions/empirical_applications.md
-    - materials/instructions/metadata.md
-    - data/ contains the downloaded data series
-</todo1>
-
-<todo2>
 Read #file:materials/pdf/linear_models_own.tex. Your task is to create a notebook called #file:simulations.ipynb inside #file:sessions/ where you implement each and every simulation exercise in #file:materials/pdf/linear_models_own.tex. 
 Simulations should be done in stata (we have a stata kernel in jupyter). 
 
@@ -46,4 +34,4 @@ Implement the following simulations:
 To get inspiration on how to craft the notebook, you can look at:
     - #file:sessions/session_1/01_autocorrelation_correlation.ipynb
     - #file:sessions/session_1/04_arma_models.ipynb
-</todo2>
+</todo1>
