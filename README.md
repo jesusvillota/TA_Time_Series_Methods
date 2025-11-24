@@ -1,15 +1,13 @@
 # TA Sessions: Methods for Time Series
 
-**Teaching Assistant Repository for CEMFI Advanced Training School**
-
-Course: [Methods for Time Series](https://www.cemfi.es/programs/cat/course.asp?cu=32)  
-Instructor: Enrique Sentana, CEMFI  
+Course: [Methods for Time Series]
+Practice Instruction: Jesus Villota, CEMFI  
 Dates: 24-28 November 2025  
-Practical Sessions: Tuesday and Thursday, 19:30-20:30
+Practical Sessions: Tuesday and Thursday, 18:15-19:15
 
 ## Overview
 
-This repository contains comprehensive practical materials for the "Methods for Time Series" course at CEMFI. The course covers econometric techniques commonly used in financial markets, with applications to economic forecasting, portfolio management, financial consulting, and risk control.
+This repository contains comprehensive practical materials for the "Methods for Time Series" course at CEMFI. 
 
 ## Course Topics
 
@@ -20,9 +18,6 @@ This repository contains comprehensive practical materials for the "Methods for 
 5. **Beyond second moments**: extreme values, copulas, and nonlinear dependence
 
 ## Repository Structure
-
-**Note**: This structure only includes non-gitignored files and directories. Some directories may exist locally but are excluded from version control. See `.gitignore` for the complete exclusion list.
-
 ```
 TA_Time_Series_Methods/
 ├── README.md                          # This file
@@ -138,36 +133,4 @@ Setup and data download guides are available in the `guides/` folder:
 
 ## Exercises
 
-Practice exercises are integrated into the notebooks. Additional empirical applications and exercises are available in:
-- `dofiles/empirical_applications.do` - Comprehensive Stata script with 29 empirical exercises
-- See `notebooks/README.md` for detailed documentation on the exercises
-
-## Pedagogical Approach
-
-Each topic follows this structure:
-
-1. **Motivation**: Why this method matters in finance
-2. **Brief Theory**: Key concepts and assumptions
-3. **Data Preparation**: Loading and exploring financial data
-4. **Implementation**: Step-by-step Stata commands
-5. **Interpretation**: What the results mean
-6. **Diagnostics**: How to check model adequacy
-7. **Practical Tips**: Common issues and solutions
-8. **Extensions**: Additional exercises for self-study
-
-## Notes
-
-- Materials are designed to be comprehensive references, not just live session materials
-- All code is extensively commented
-- Jupyter notebooks provide interactive learning with step-by-step explanations
-- Stata `.do` files in `dofiles/` contain comprehensive empirical applications
-- Students can work at their own pace and revisit materials as needed
-
-## Contact
-
-For questions about the practical sessions, contact the Teaching Assistant.
-
----
-
-**Last Updated**: November 2025  
-**Course Link**: https://www.cemfi.es/programs/cat/course.asp?cu=32
+Practice exercises are integrated into the notebooks. For those who want to run the exercises directly in stata, find the do files in the `dofiles` folder.
