@@ -21,14 +21,18 @@ This repository contains comprehensive practical materials for the "Methods for 
 
 ## Repository Structure
 
+**Note**: This structure only includes non-gitignored files and directories. Some directories may exist locally but are excluded from version control. See `.gitignore` for the complete exclusion list.
+
 ```
 TA_Time_Series_Methods/
 ├── README.md                          # This file
+├── SETUP_GUIDE.md                     # Setup instructions
+├── pyproject.toml                     # Python project configuration
+├── uv.lock                            # Dependency lock file
 ├── data/                              # Financial datasets
 │   ├── raw/                          # Original data files
-│   ├── processed/                    # Cleaned data ready for analysis
-│   └── data_sources.md               # Data documentation
-├── sessions/                          # Practical session materials
+│   └── processed/                    # Cleaned data ready for analysis
+├── notebooks/                         # Practical session materials
 │   ├── session_1/                    # Tuesday session materials
 │   │   ├── 1_1_simul_univariate.ipynb
 │   │   ├── 1_2_data_cleaning.ipynb
@@ -39,13 +43,13 @@ TA_Time_Series_Methods/
 │   │   ├── 2_2_simul_kalman.ipynb
 │   │   ├── 2_3_simul_gdp_gdi.ipynb
 │   │   └── 2_4_volatility.ipynb
-│   ├── do_file/                       # Stata .do files and outputs
-│   ├── archive/                       # Archived notebooks
-│   └── README.md                      # Sessions documentation
-└── references/                        # Quick reference materials
-    ├── stata_cheatsheet.md
-    ├── time_series_diagnostics.md
-    └── common_pitfalls.md
+│   ├── notebook_styles.css           # Notebook styling
+│   └── README.md                      # Notebooks documentation
+├── dofiles/                           # Stata .do files and outputs
+│   └── empirical_applications.do     # Comprehensive Stata script
+└── guides/                            # Setup and data guides
+    ├── data_download_guide.pdf
+    └── installation_guide.pdf
 ```
 
 ## Software Requirements
@@ -75,14 +79,14 @@ Some topics may require specialized packages which will be noted in the respecti
 ### Option 1: Using Jupyter Notebooks (Recommended for Learning)
 
 1. Ensure you have Jupyter and Stata kernel installed
-2. Navigate to the session folder (e.g., `sessions/session_1/`)
+2. Navigate to the session folder (e.g., `notebooks/session_1/`)
 3. Open the notebook file (`.ipynb`)
 4. Follow the narrative and execute cells step-by-step
 
 ### Option 2: Using Standalone Stata Scripts
 
 1. Open Stata
-2. Navigate to the sessions folder (e.g., `sessions/do_file/`)
+2. Navigate to the dofiles folder (e.g., `dofiles/`)
 3. Open and run the `.do` file
 4. Review comments and output
 
@@ -97,11 +101,11 @@ Some topics may require specialized packages which will be noted in the respecti
 - ARMA models
 
 **Materials:**
-- `sessions/session_1/1_1_simul_univariate.ipynb` - Univariate simulations
-- `sessions/session_1/1_2_data_cleaning.ipynb` - Data preparation
-- `sessions/session_1/1_3_stationarity_unit_roots.ipynb` - Unit root tests
-- `sessions/session_1/1_4_arma_models.ipynb` - ARMA modeling
-- Stata scripts available in `sessions/do_file/`
+- `notebooks/session_1/1_1_simul_univariate.ipynb` - Univariate simulations
+- `notebooks/session_1/1_2_data_cleaning.ipynb` - Data preparation
+- `notebooks/session_1/1_3_stationarity_unit_roots.ipynb` - Unit root tests
+- `notebooks/session_1/1_4_arma_models.ipynb` - ARMA modeling
+- Stata scripts available in `dofiles/`
 
 ### Session 2 (Thursday, Nov 28, 19:30-20:30)
 
@@ -112,32 +116,31 @@ Some topics may require specialized packages which will be noted in the respecti
 - Volatility modeling
 
 **Materials:**
-- `sessions/session_2/2_1_simul_multivariate.ipynb` - Multivariate simulations
-- `sessions/session_2/2_2_simul_kalman.ipynb` - Kalman filter
-- `sessions/session_2/2_3_simul_gdp_gdi.ipynb` - GDP/GDI analysis
-- `sessions/session_2/2_4_volatility.ipynb` - Volatility models
-- Stata scripts available in `sessions/do_file/`
+- `notebooks/session_2/2_1_simul_multivariate.ipynb` - Multivariate simulations
+- `notebooks/session_2/2_2_simul_kalman.ipynb` - Kalman filter
+- `notebooks/session_2/2_3_simul_gdp_gdi.ipynb` - GDP/GDI analysis
+- `notebooks/session_2/2_4_volatility.ipynb` - Volatility models
+- Stata scripts available in `dofiles/`
 
 ## Data
 
-All datasets used in the practical sessions are documented in `data/data_sources.md`. Data files are stored in:
+Data files are stored in:
 - `data/raw/`: Original downloaded data
 - `data/processed/`: Cleaned and formatted data ready for analysis
 
-If you need to download data yourself, see the data sources documentation for instructions.
+If you need to download data yourself, see the guides in the `guides/` folder for instructions.
 
 ## Reference Materials
 
-Quick reference guides are available in the `references/` folder:
-- **stata_cheatsheet.md**: Common Stata commands for time series analysis
-- **time_series_diagnostics.md**: How to interpret diagnostic tests
-- **common_pitfalls.md**: Troubleshooting guide for frequent issues
+Setup and data download guides are available in the `guides/` folder:
+- **data_download_guide.pdf**: Instructions for downloading and preparing data
+- **installation_guide.pdf**: Software installation and setup instructions
 
 ## Exercises
 
 Practice exercises are integrated into the notebooks. Additional empirical applications and exercises are available in:
-- `sessions/do_file/empirical_applications.do` - Comprehensive Stata script with 29 empirical exercises
-- See `sessions/README.md` for detailed documentation on the exercises
+- `dofiles/empirical_applications.do` - Comprehensive Stata script with 29 empirical exercises
+- See `notebooks/README.md` for detailed documentation on the exercises
 
 ## Pedagogical Approach
 
@@ -157,9 +160,8 @@ Each topic follows this structure:
 - Materials are designed to be comprehensive references, not just live session materials
 - All code is extensively commented
 - Jupyter notebooks provide interactive learning with step-by-step explanations
-- Stata `.do` files in `sessions/do_file/` contain comprehensive empirical applications
+- Stata `.do` files in `dofiles/` contain comprehensive empirical applications
 - Students can work at their own pace and revisit materials as needed
-- Archived notebooks are available in `sessions/archive/` for reference
 
 ## Contact
 
