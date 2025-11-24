@@ -1,9 +1,9 @@
-# TA Sessions: Methods for Time Series
+# Practice Sessions: Methods for Time Series
 
-Course: [Methods for Time Series]
-Practice Instruction: Jesus Villota, CEMFI  
-Dates: 24-28 November 2025  
-Practical Sessions: Tuesday and Thursday, 18:15-19:15
+- Course: *Methods for Time Series*
+- Instructor: *Jesus Villota, CEMFI*  
+- Dates: *24-28 November 2025*
+- Practical Sessions: *Tuesday and Thursday, 18:15-19:15*
 
 ## Overview
 
