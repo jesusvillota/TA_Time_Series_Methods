@@ -18,6 +18,9 @@ This repository contains comprehensive practical materials for the "Methods for 
 5. **Beyond second moments**: extreme values, copulas, and nonlinear dependence
 
 ## Repository Structure
+
+> **Note:** This documentation only includes files and directories that are tracked in git (non-gitignored). Some directories like `archive/`, `session2/`, and other development materials are excluded from version control.
+
 ```
 TA_Time_Series_Methods/
 ├── README.md                          # This file
@@ -28,20 +31,13 @@ TA_Time_Series_Methods/
 │   ├── raw/                          # Original data files
 │   └── processed/                    # Cleaned data ready for analysis
 ├── notebooks/                         # Practical session materials
-│   ├── session_1/                    # Tuesday session materials
-│   │   ├── 1_1_simul_univariate.ipynb
-│   │   ├── 1_2_data_cleaning.ipynb
-│   │   ├── 1_3_stationarity_unit_roots.ipynb
-│   │   └── 1_4_arma_models.ipynb
-│   ├── session_2/                     # Thursday session materials
-│   │   ├── 2_1_simul_multivariate.ipynb
-│   │   ├── 2_2_simul_kalman.ipynb
-│   │   ├── 2_3_simul_gdp_gdi.ipynb
-│   │   └── 2_4_volatility.ipynb
-│   ├── notebook_styles.css           # Notebook styling
-│   └── README.md                      # Notebooks documentation
+│   ├── 0_data_cleaning.ipynb         # Data preparation notebook
+│   └── session1/                     # Tuesday session materials
+│       ├── 1_1_simul_univariate.ipynb
+│       └── 1_2_arma_models.ipynb
 ├── dofiles/                           # Stata .do files and outputs
-│   └── empirical_applications.do     # Comprehensive Stata script
+│   ├── session1/                     # Session 1 Stata scripts
+│   └── session2/                     # Session 2 Stata scripts
 └── guides/                            # Setup and data guides
     ├── data_download_guide.pdf
     └── installation_guide.pdf
@@ -74,14 +70,14 @@ Some topics may require specialized packages which will be noted in the respecti
 ### Option 1: Using Jupyter Notebooks (Recommended for Learning)
 
 1. Ensure you have Jupyter and Stata kernel installed
-2. Navigate to the session folder (e.g., `notebooks/session_1/`)
+2. Navigate to the session folder (e.g., `notebooks/session1/`)
 3. Open the notebook file (`.ipynb`)
 4. Follow the narrative and execute cells step-by-step
 
 ### Option 2: Using Standalone Stata Scripts
 
 1. Open Stata
-2. Navigate to the dofiles folder (e.g., `dofiles/`)
+2. Navigate to the dofiles folder (e.g., `dofiles/session1/`)
 3. Open and run the `.do` file
 4. Review comments and output
 
@@ -92,15 +88,13 @@ Some topics may require specialized packages which will be noted in the respecti
 **Topics Covered:**
 - Univariate time series model simulations
 - Data loading and preparation
-- Stationarity and unit root tests
 - ARMA models
 
 **Materials:**
-- `notebooks/session_1/1_1_simul_univariate.ipynb` - Univariate simulations
-- `notebooks/session_1/1_2_data_cleaning.ipynb` - Data preparation
-- `notebooks/session_1/1_3_stationarity_unit_roots.ipynb` - Unit root tests
-- `notebooks/session_1/1_4_arma_models.ipynb` - ARMA modeling
-- Stata scripts available in `dofiles/`
+- `notebooks/0_data_cleaning.ipynb` - Data preparation
+- `notebooks/session1/1_1_simul_univariate.ipynb` - Univariate simulations
+- `notebooks/session1/1_2_arma_models.ipynb` - ARMA modeling
+- Stata scripts available in `dofiles/session1/`
 
 ### Session 2 (Thursday, Nov 28, 19:30-20:30)
 
@@ -111,11 +105,8 @@ Some topics may require specialized packages which will be noted in the respecti
 - Volatility modeling
 
 **Materials:**
-- `notebooks/session_2/2_1_simul_multivariate.ipynb` - Multivariate simulations
-- `notebooks/session_2/2_2_simul_kalman.ipynb` - Kalman filter
-- `notebooks/session_2/2_3_simul_gdp_gdi.ipynb` - GDP/GDI analysis
-- `notebooks/session_2/2_4_volatility.ipynb` - Volatility models
-- Stata scripts available in `dofiles/`
+- Stata scripts available in `dofiles/session2/`
+- *Note: Session 2 notebooks are in development and not yet tracked in this repository*
 
 ## Data
 
@@ -133,4 +124,4 @@ Setup and data download guides are available in the `guides/` folder:
 
 ## Exercises
 
-Practice exercises are integrated into the notebooks. For those who want to run the exercises directly in stata, find the do files in the `dofiles` folder.
+Practice exercises are integrated into the notebooks. For those who want to run the exercises directly in Stata, find the do files in the `dofiles/` folder organized by session.
