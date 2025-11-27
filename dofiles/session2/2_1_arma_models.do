@@ -848,6 +848,27 @@ display ""
 * tests the model's practical value:
 * - Can the model predict future VIX values accurately?
 * - How does forecast accuracy deteriorate as the horizon increases?
+* - How well does the model perform over a 10-year forecast horizon (2015-2025)?
+*
+* Train/Test Split Methodology
+*
+* We employ a strict train/test split to ensure unbiased evaluation:
+*
+* - Training Period: January 1990 to December 2014 (25 years)
+*   - Used exclusively for model estimation
+*   - Provides sufficient data to estimate ARMA(2,1) parameters reliably
+*
+* - Test Period: January 2015 to November 2025 (10+ years)
+*   - Used exclusively for out-of-sample evaluation
+*   - Tests model's ability to forecast over a long horizon
+*   - Includes major market events (e.g., COVID-19 in 2020) that challenge model robustness
+*
+* Why This Split Matters:
+*
+* 1. No data leakage: Model parameters are estimated only on training data
+* 2. Realistic evaluation: Forecasts are generated without knowledge of future outcomes
+* 3. Long-horizon testing: 10-year forecast tests model's ability to capture long-term dynamics
+* 4. Stress testing: The test period includes extreme events (COVID-19) that test model robustness
 *
 * Dynamic Forecasting Framework
 *
@@ -856,12 +877,17 @@ display ""
 * hat{Y}_{T+h|T} = hat{phi}_1*hat{Y}_{T+h-1|T} + hat{phi}_2*hat{Y}_{T+h-2|T} + hat{theta}_1*hat{epsilon}_{T+h-1|T}
 *
 * where:
-* - hat{Y}_{T+h|T} is the h-step ahead forecast made at time T
+* - hat{Y}_{T+h|T} is the h-step ahead forecast made at time T (end of 2014)
 * - Past forecasts replace actual values as horizon extends
-* - Forecast errors compound, widening confidence intervals
+* - Forecast errors compound, widening confidence intervals over time
 *
 * Confidence Intervals:
 * 95% CI: hat{Y}_{T+h|T} ± 1.96 × sqrt(MSE(h))
+*
+* Key Insight: As the forecast horizon increases, confidence intervals widen because:
+* - Forecast errors accumulate (each step uses previous forecasts, not actual values)
+* - Uncertainty compounds over time
+* - Long-term forecasts converge toward the unconditional mean
 *
 * Performance Metrics
 *
@@ -869,13 +895,21 @@ display ""
 *
 * 1. Mean Error (ME): (1/n)*sum(Y_t - hat{Y}_t)
 *    - Measures bias (should be ≈ 0 for unbiased forecasts)
+*    - Positive ME → model systematically underestimates VIX
+*    - Negative ME → model systematically overestimates VIX
 *
 * 2. Mean Absolute Error (MAE): (1/n)*sum|Y_t - hat{Y}_t|
 *    - Average magnitude of errors (lower = better)
+*    - Interpretable in VIX units (e.g., MAE = 5 means average error of 5 VIX points)
 *
 * 3. Root Mean Squared Error (RMSE): sqrt((1/n)*sum(Y_t - hat{Y}_t)^2)
-*    - Penalizes large errors more heavily
+*    - Penalizes large errors more heavily than MAE
 *    - Standard metric for comparing forecast methods
+*    - RMSE ≥ MAE (equality only if all errors have same magnitude)
+*
+* 4. Mean Absolute Percentage Error (MAPE): (1/n)*sum|(Y_t - hat{Y}_t)/Y_t| × 100
+*    - Expresses errors as percentage of actual values
+*    - Useful for comparing forecast accuracy across different scales
 *
 * Interpretation Guidelines
 *
@@ -884,76 +918,228 @@ display ""
 * - Low MAE and RMSE relative to series volatility
 * - Most actual values within 95% confidence bands
 * - Errors that don't exhibit systematic patterns (no autocorrelation)
+*
+* Expected Behavior for Long-Horizon Forecasts:
+* - Forecasts will revert toward the unconditional mean (approximately the long-run average VIX)
+* - Accuracy will deteriorate as horizon increases (forecast errors compound)
+* - Confidence intervals will widen over time
+* - Model may struggle during extreme events (e.g., COVID-19 volatility spike in 2020)
 
-* Create a sample split for out-of-sample forecasting
-* Use data up to end of 2014 for estimation, forecast into Jan 2015
+* ============================================================================
+* Train/Test Split and ARMA(2,1) Estimation on Training Data Only
+* ============================================================================
 
-* First, identify the last observation in 2014
-summarize date  // Display summary of date variable
-gen year = year(date)  // Extract year from date variable
-gen month = month(date)  // Extract month from date variable
+* Define training and test periods
+* Training: January 1990 to December 2014 (25 years)
+* Test: January 2015 to November 2025 (10+ years)
 
-* Save last date in dataset for reference
-quietly summarize date  // Compute date summary statistics without output
-local last_date = r(max)  // Store maximum date value in local macro
+display "Train/Test Split Summary"
+display "========================="
+display "Training Period: January 1990 to December 2014"
+display "Test Period: January 2015 to November 2025"
+display ""
 
-* Re-estimate ARMA(2,1) on full sample for forecasting
-arima lgvix, ar(1/2) ma(1) vce(robust)  // Re-estimate ARMA(2,1) model for forecasting
+* Count observations in each period
+quietly count if date <= td(31dec2014) & !missing(lgvix)
+local n_train = r(N)
+quietly count if date >= td(01jan2015) & !missing(lgvix)
+local n_test = r(N)
 
-* Generate forecasts for next 20 periods (approximately 1 month of trading days)
-predict lgvix_forecast, dynamic(td(01jan2015))  // Generate dynamic forecasts starting Jan 1, 2015
-predict lgvix_se, mse  // Generate mean squared error estimates for confidence intervals
+display "Training observations: " `n_train'
+display "Test observations: " `n_test'
+display ""
 
-* Convert forecasts back to VIX level
-gen vix_forecast = exp(lgvix_forecast)  // Transform log-VIX forecasts back to VIX level
+* Estimate ARMA(2,1) model using ONLY training data (1990-2014)
+display "Estimating ARMA(2,1) on Training Data (1990-2014)..."
+display "====================================================="
+arima lgvix if date <= td(31dec2014), ar(1/2) ma(1) vce(robust)
 
-* Calculate confidence intervals
-gen lgvix_lb = lgvix_forecast - 1.96*sqrt(lgvix_se)  // Calculate lower bound of 95% CI in log scale
-gen lgvix_ub = lgvix_forecast + 1.96*sqrt(lgvix_se)  // Calculate upper bound of 95% CI in log scale
-gen vix_lb = exp(lgvix_lb)  // Transform lower bound to VIX level
-gen vix_ub = exp(lgvix_ub)  // Transform upper bound to VIX level
+* Display information criteria for the training model
+display ""
+display "Model Information Criteria (Training Sample):"
+estat ic
 
-* Display forecast statistics
-display "Out-of-Sample Forecast Summary"
-display "==============================="
-summarize vix vix_forecast if date >= td(01jan2015) & date <= td(31jan2015)
+* Store the estimated model for forecasting
+* The model is now stored in memory and will be used for predictions
 
-* Plot forecasts vs actual values for January 2015
-twoway (line vix date if date >= td(01dec2014) & date <= td(31jan2015), lcolor(blue) lwidth(medium)) ///
-       (line vix_forecast date if date >= td(01dec2014) & date <= td(31jan2015), lcolor(red) lpattern(dash) lwidth(medium)) ///
-       (rarea vix_lb vix_ub date if date >= td(01jan2015) & date <= td(31jan2015), fcolor(red%20) lwidth(none)), ///
-    title("VIX Out-of-Sample Forecasts vs Actual", size(medium)) ///
-    subtitle("ARMA(2,1) Model - January 2015") ///
-    ytitle("VIX Index") ///
-    xtitle("Date") ///
-    tlabel(01dec2014(15)31jan2015, format(%tdCY)) ///
-    legend(order(1 "Actual VIX" 2 "Forecast" 3 "95% CI") rows(1)) ///
-    scheme(s2color)
-/* graph export "../../output/vix_forecast.png", replace width(1200) */
+* ============================================================================
+* Generate Dynamic Forecasts for Entire Test Period (2015-2025)
+* ============================================================================
+
+display ""
+display "Generating Dynamic Forecasts for Test Period (2015-2025)..."
+display "============================================================="
+
+* Generate dynamic forecasts starting from January 1, 2015
+* Dynamic forecasting uses past forecasts (not actual values) for future predictions
+predict lgvix_forecast if date >= td(01jan2015), dynamic(td(01jan2015))
+
+* Generate mean squared error estimates for confidence intervals
+predict lgvix_se if date >= td(01jan2015), mse
+
+* Convert log-VIX forecasts back to VIX level
+gen vix_forecast = exp(lgvix_forecast) if date >= td(01jan2015)
+
+* Calculate 95% confidence intervals in log scale, then transform to VIX level
+gen lgvix_lb = lgvix_forecast - 1.96*sqrt(lgvix_se) if date >= td(01jan2015)
+gen lgvix_ub = lgvix_forecast + 1.96*sqrt(lgvix_se) if date >= td(01jan2015)
+gen vix_lb = exp(lgvix_lb) if date >= td(01jan2015)
+gen vix_ub = exp(lgvix_ub) if date >= td(01jan2015)
+
+* Display summary statistics for actual vs forecasted VIX in test period
+display ""
+display "Out-of-Sample Forecast Summary (2015-2025)"
+display "============================================"
+summarize vix vix_forecast if date >= td(01jan2015)
+
+* ============================================================================
+* Calculate Forecast Accuracy Metrics for Entire Test Period (2015-2025)
+* ============================================================================
+
+* Compute forecast errors for the entire test period
+gen forecast_error = vix - vix_forecast if date >= td(01jan2015)
+gen abs_error = abs(forecast_error) if date >= td(01jan2015)
+gen squared_error = forecast_error^2 if date >= td(01jan2015)
+gen pct_error = abs(forecast_error / vix) * 100 if date >= td(01jan2015) & vix != 0
 
 * Calculate forecast accuracy metrics
-gen forecast_error = vix - vix_forecast if date >= td(01jan2015) & date <= td(31jan2015)  // Compute forecast errors for January 2015
-gen abs_error = abs(forecast_error)  // Calculate absolute value of forecast errors
-gen squared_error = forecast_error^2  // Calculate squared forecast errors
+quietly summarize forecast_error if date >= td(01jan2015)
+local me = r(mean)
 
-quietly summarize forecast_error if date >= td(01jan2015) & date <= td(31jan2015)  // Compute mean error statistics
-local me = r(mean)  // Store mean error in local macro
-quietly summarize abs_error if date >= td(01jan2015) & date <= td(31jan2015)  // Compute mean absolute error statistics
-local mae = r(mean)  // Store mean absolute error in local macro
-quietly summarize squared_error if date >= td(01jan2015) & date <= td(31jan2015)  // Compute mean squared error statistics
-local mse = r(mean)  // Store mean squared error in local macro
-local rmse = sqrt(`mse')  // Calculate root mean squared error from MSE
+quietly summarize abs_error if date >= td(01jan2015)
+local mae = r(mean)
 
+quietly summarize squared_error if date >= td(01jan2015)
+local mse = r(mean)
+local rmse = sqrt(`mse')
+
+quietly summarize pct_error if date >= td(01jan2015)
+local mape = r(mean)
+
+* Display comprehensive forecast accuracy metrics
 display ""
-display "Forecast Accuracy Metrics (January 2015):"
-display "=========================================="
-display "Mean Error (ME):           " %8.4f `me'
-display "Mean Absolute Error (MAE): " %8.4f `mae'
-display "Root Mean Squared Error:   " %8.4f `rmse'
+display "Forecast Accuracy Metrics (2015-2025)"
+display "======================================="
+display "Mean Error (ME):              " %10.4f `me'
+display "Mean Absolute Error (MAE):    " %10.4f `mae'
+display "Root Mean Squared Error (RMSE): " %10.4f `rmse'
+display "Mean Absolute % Error (MAPE): " %10.4f `mape' "%"
 display ""
 display "Interpretation:"
-display "- ME close to 0 suggests unbiased forecasts"
-display "- Lower MAE and RMSE indicate better forecast accuracy"
+display "- ME: " %8.4f `me' " (positive = model underestimates VIX on average)"
+display "- MAE: " %8.4f `mae' " VIX points (average forecast error magnitude)"
+display "- RMSE: " %8.4f `rmse' " VIX points (penalizes large errors more)"
+display "- MAPE: " %8.4f `mape' "% (average percentage error)"
+display ""
+display "Note: These metrics evaluate the model's performance over a 10-year"
+display "      forecast horizon, which is a challenging test of model robustness."
+
+* ============================================================================
+* Visualizations: Actual vs Forecasted VIX (2015-2025)
+* ============================================================================
+
+* Compute date value for forecast start (needed for xline and text options)
+local forecast_start = td(01jan2015)
+
+* Main plot: Full forecast period with training data context
+twoway (line vix date if date >= td(01jan2010) & date <= td(31dec2025), lcolor(blue) lwidth(medium)) ///
+       (line vix_forecast date if date >= td(01jan2015) & date <= td(31dec2025), lcolor(red) lpattern(dash) lwidth(medium)) ///
+       (rarea vix_lb vix_ub date if date >= td(01jan2015) & date <= td(31dec2025), fcolor(red%20) lwidth(none)) ///
+       (line vix date if date >= td(01jan2010) & date < td(01jan2015), lcolor(blue%50) lwidth(thin)), ///
+    title("VIX Out-of-Sample Forecasts vs Actual (2015-2025)", size(medium)) ///
+    subtitle("ARMA(2,1) Model - 10-Year Forecast Horizon") ///
+    ytitle("VIX Index") ///
+    xtitle("Date") ///
+    tlabel(01jan2010(2)31dec2025, format(%tdCY)) ///
+    legend(order(1 "Actual VIX (Training)" 4 "Actual VIX (Test)" 2 "Forecast" 3 "95% CI") rows(2)) ///
+    xline(`forecast_start', lpattern(dash) lcolor(gray)) ///
+    text(80 `forecast_start' "Forecast Start", placement(e)) ///
+    scheme(s2color)
+/* graph export "../../output/vix_forecast_2015_2025.png", replace width(1400) */
+
+* Zoomed plot: Focus on test period (2015-2025) for detailed view
+twoway (line vix date if date >= td(01jan2015) & date <= td(31dec2025), lcolor(blue) lwidth(medium)) ///
+       (line vix_forecast date if date >= td(01jan2015) & date <= td(31dec2025), lcolor(red) lpattern(dash) lwidth(medium)) ///
+       (rarea vix_lb vix_ub date if date >= td(01jan2015) & date <= td(31dec2025), fcolor(red%20) lwidth(none)), ///
+    title("VIX Forecasts vs Actual - Test Period Detail", size(medium)) ///
+    subtitle("ARMA(2,1) Model - January 2015 to November 2025") ///
+    ytitle("VIX Index") ///
+    xtitle("Date") ///
+    tlabel(01jan2015(1)31dec2025, format(%tdCY)) ///
+    legend(order(1 "Actual VIX" 2 "Forecast" 3 "95% CI") rows(1)) ///
+    scheme(s2color)
+/* graph export "../../output/vix_forecast_test_period_detail.png", replace width(1400) */
+
+* Optional: Zoom on COVID-19 period (2020) to see how model handles extreme events
+twoway (line vix date if date >= td(01jan2020) & date <= td(31dec2020), lcolor(blue) lwidth(medium)) ///
+       (line vix_forecast date if date >= td(01jan2020) & date <= td(31dec2020), lcolor(red) lpattern(dash) lwidth(medium)) ///
+       (rarea vix_lb vix_ub date if date >= td(01jan2020) & date <= td(31dec2020), fcolor(red%20) lwidth(none)), ///
+    title("VIX Forecasts During COVID-19 Crisis (2020)", size(medium)) ///
+    subtitle("ARMA(2,1) Model Performance During Extreme Volatility") ///
+    ytitle("VIX Index") ///
+    xtitle("Date") ///
+    tlabel(01jan2020(1)31dec2020, format(%tdCY)) ///
+    legend(order(1 "Actual VIX" 2 "Forecast" 3 "95% CI") rows(1)) ///
+    scheme(s2color)
+/* graph export "../../output/vix_forecast_covid2020.png", replace width(1400) */
+
+* Interpreting the 10-Year Forecast Results
+*
+* Key Findings from the 10-Year Forecast Evaluation:
+*
+* The ARMA(2,1) model's performance over the 2015-2025 period reveals important 
+* insights about long-horizon forecasting:
+*
+* 1. Forecast Convergence: As expected, long-horizon forecasts converge toward the 
+*    unconditional mean (approximately the long-run average VIX level estimated 
+*    from training data)
+*
+* 2. Confidence Interval Behavior: The 95% confidence intervals widen over time, 
+*    reflecting increasing uncertainty as the forecast horizon extends
+*
+* 3. Extreme Event Challenges: The model may struggle during extreme volatility 
+*    episodes (e.g., COVID-19 in 2020), where actual VIX spikes far exceed 
+*    forecasted values
+*
+* 4. Mean Reversion: The model captures the mean-reverting nature of volatility, 
+*    but may underestimate the magnitude and persistence of volatility spikes
+*
+* Understanding Forecast Accuracy Metrics:
+*
+* - Mean Error (ME): Indicates systematic bias. A positive ME suggests the model 
+*   tends to underestimate VIX on average
+* - Mean Absolute Error (MAE): Provides the average forecast error magnitude in 
+*   VIX units
+* - Root Mean Squared Error (RMSE): Penalizes large errors more heavily, useful 
+*   for identifying periods of poor forecast performance
+* - Mean Absolute Percentage Error (MAPE): Expresses errors as percentages, making 
+*   it easier to compare across different volatility regimes
+*
+* Expected Performance: For a 10-year forecast horizon, it is normal for:
+* - Forecasts to revert toward the mean (this is a feature of stationary ARMA models)
+* - Accuracy to deteriorate over longer horizons (forecast errors compound)
+* - The model to miss extreme events (ARMA models capture average dynamics, not tail events)
+*
+* Lessons for Practical Forecasting:
+*
+* 1. Short vs. Long Horizon: ARMA models are more reliable for short-term forecasts 
+*    (days to weeks) than long-term forecasts (years)
+*
+* 2. Model Limitations: Linear ARMA models cannot capture:
+*    - Sudden regime changes (e.g., financial crises)
+*    - Time-varying volatility (consider GARCH models)
+*    - Non-linear dynamics
+*
+* 3. When to Use ARMA Forecasts: ARMA models are most useful when:
+*    - Forecasting over short to medium horizons
+*    - The series exhibits stable autocorrelation patterns
+*    - Extreme events are rare
+*
+* 4. Alternative Approaches: For better long-horizon forecasts or during volatile 
+*    periods, consider:
+*    - GARCH models (capture volatility clustering)
+*    - Regime-switching models (capture structural breaks)
+*    - Machine learning methods (capture non-linear patterns)
 
 * ----------------------------------------------------------------------------
 * CLOSING
