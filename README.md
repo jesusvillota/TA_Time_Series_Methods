@@ -19,8 +19,6 @@ This repository contains comprehensive practical materials for the "Methods for 
 
 ## Repository Structure
 
-> **Note:** This documentation only includes files and directories that are tracked in git (non-gitignored). Some directories like `archive/`, `session2/`, and other development materials are excluded from version control.
-
 ```
 TA_Time_Series_Methods/
 ├── README.md                          # This file
@@ -31,13 +29,17 @@ TA_Time_Series_Methods/
 │   ├── raw/                          # Original data files
 │   └── processed/                    # Cleaned data ready for analysis
 ├── notebooks/                         # Practical session materials
-│   ├── 0_data_cleaning.ipynb         # Data preparation notebook
-│   └── session1/                     # Tuesday session materials
-│       ├── 1_1_simul_univariate.ipynb
-│       └── 1_2_arma_models.ipynb
-├── dofiles/                           # Stata .do files and outputs
+│   ├── session1/                     # Tuesday session materials
+│   │   └── 1_1_simul_univariate.ipynb
+│   └── session2/                     # Thursday session materials
+│       ├── 2_1_arma_models.ipynb
+│       └── 2_2_gdp_gdi.ipynb
+├── dofiles/                           # Stata .do files
 │   ├── session1/                     # Session 1 Stata scripts
+│   │   └── 1_1_simul_univariate.do
 │   └── session2/                     # Session 2 Stata scripts
+│       ├── 2_1_arma_models.do
+│       └── 2_2_gdp_gdi.do
 └── guides/                            # Setup and data guides
     ├── data_download_guide.pdf
     └── installation_guide.pdf
@@ -91,9 +93,7 @@ Some topics may require specialized packages which will be noted in the respecti
 - ARMA models
 
 **Materials:**
-- `notebooks/0_data_cleaning.ipynb` - Data preparation
 - `notebooks/session1/1_1_simul_univariate.ipynb` - Univariate simulations
-- `notebooks/session1/1_2_arma_models.ipynb` - ARMA modeling
 - Stata scripts available in `dofiles/session1/`
 
 ### Session 2 (Thursday, Nov 28, 19:30-20:30)
@@ -105,8 +105,9 @@ Some topics may require specialized packages which will be noted in the respecti
 - Volatility modeling
 
 **Materials:**
+- `notebooks/session2/2_1_arma_models.ipynb` - ARMA modeling
+- `notebooks/session2/2_2_gdp_gdi.ipynb` - GDP/GDI simulations
 - Stata scripts available in `dofiles/session2/`
-- *Note: Session 2 notebooks are in development and not yet tracked in this repository*
 
 ## Data
 
